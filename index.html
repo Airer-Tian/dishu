@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>阳光山坡打地鼠</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <div class="sun"></div>
+  <div class="moon"></div>
+  <div class="stars" id="stars"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <svg class="hills" viewBox="0 0 1440 260" preserveAspectRatio="none">
+    <path d="M0 260 L0 180 Q180 90 430 160 Q640 210 860 150 Q1080 90 1440 190 L1440 260 Z" fill="var(--hill-far)"/>
+    <path d="M0 260 L0 205 Q260 120 620 185 Q960 240 1440 170 L1440 260 Z" fill="var(--hill-mid)"/>
+    <path d="M0 260 L0 235 Q360 170 720 225 Q1100 260 1440 210 L1440 260 Z" fill="var(--hill-near)"/>
+  </svg>
+  <span class="flower f1">🌻</span>
+  <span class="flower f2">🌼</span>
+  <span class="flower f3">🌷</span>
+  <span class="flower f4">🌸</span>
+  <span class="butterfly">🦋</span>
+</div>
+
+<section class="screen active" id="start-screen">
+  <div class="start-wrap">
+    <div id="mascot"></div>
+    <h1 class="title">阳光山坡<span class="title-sub">打地鼠</span></h1>
+    <p class="tagline">30 关冒险 · 从简单到超难<br>看到了地鼠就敲它！</p>
+    <button class="btn big" id="btn-start">开始游戏</button>
+    <button class="btn ghost" id="btn-map-from-start">关卡地图</button>
+  </div>
+</section>
+
+<section class="screen" id="map-screen">
+  <div class="map-wrap">
+    <h2 class="h2">🌻 关卡地图</h2>
+    <p class="map-hint">打完一关，下一关就会解锁</p>
+    <div id="map-grid"></div>
+    <button class="btn" id="btn-home">🏠 回主菜单</button>
+  </div>
+</section>
+
+<section class="screen" id="game-screen">
+  <header class="hud">
+    <div class="lv-badge">第 <span id="level-no">1</span> 关</div>
+    <div class="score-box">⭐ <span id="score">0</span></div>
+    <button class="qbtn sm" id="btn-quit" title="退出到地图">🗺</button>
+  </header>
+  <div class="time-bar"><div id="time-fill"></div></div>
+  <div id="prompt">🎯 目标：拿到 <b>8</b> 分</div>
+  <main id="board"></main>
+  <div id="hammer"><svg viewBox="0 0 100 100">
+    <g transform="rotate(-35 50 50)">
+      <rect x="30" y="6" width="44" height="34" rx="12" fill="#F0907E"/>
+      <rect x="30" y="6" width="44" height="18" rx="9" fill="#F7A898"/>
+      <path d="M52 12 l2.2 4.6 5.4.8 -4 3.9 .9 5.4 -4.5 -2.4 -4.5 2.4 .9 -5.4 -4 -3.9 5.4-.8 Z" fill="#FFF9E8"/>
+      <rect x="42" y="40" width="16" height="48" rx="8" fill="#C08A5F"/>
+      <rect x="42" y="40" width="5" height="48" rx="2.5" fill="#D09B6F"/>
+    </g>
+  </svg></div>
+</section>
+
+<section class="screen" id="result-screen">
+  <div class="result-card">
+    <div id="result-stars"></div>
+    <h2 id="result-title"></h2>
+    <p id="result-msg"></p>
+    <div class="result-line">得分 <b id="result-score"></b></div>
+    <div class="result-line sub">目标 <span id="result-target"></span> 分</div>
+    <div class="btns">
+      <button class="btn big" id="btn-next">下一关 ▶</button>
+      <button class="btn big" id="btn-replay">↻ 再玩一次</button>
+      <button class="btn ghost" id="btn-map">关卡地图</button>
+      <button class="btn ghost" id="btn-home2">🏠 主菜单</button>
+    </div>
+  </div>
+</section>
+
+<div class="quick" aria-hidden="false">
+  <button class="qbtn" id="btn-mute" title="声音开关">🔊</button>
+  <button class="qbtn" id="btn-night" title="护眼模式">🌙</button>
+</div>
+
+<div class="intro" id="intro"><div class="intro-inner">第 <span id="intro-no">1</span> 关</div></div>
+
+<template id="tpl-mole">
+  <svg class="mole" viewBox="0 0 160 130" aria-hidden="true">
+    <g>
+      <ellipse cx="42" cy="26" rx="14" ry="16" fill="#8A6A5A"/>
+      <ellipse cx="42" cy="26" rx="8" ry="10" fill="#E8AFA2"/>
+      <ellipse cx="118" cy="26" rx="14" ry="16" fill="#8A6A5A"/>
+      <ellipse cx="118" cy="26" rx="8" ry="10" fill="#E8AFA2"/>
+      <g>
+        <path d="M80 20 q-2 -10 6 -14 q4 8 -6 14" fill="#7CC576"/>
+        <path d="M80 20 q3 -12 -6 -16 q-5 9 6 16" fill="#8EDB88"/>
+      </g>
+      <ellipse cx="80" cy="96" rx="48" ry="30" fill="#7E5A45"/>
+      <ellipse cx="80" cy="102" rx="28" ry="18" fill="#EBD3B8"/>
+      <ellipse cx="36" cy="90" rx="12" ry="9" fill="#7E5A45" transform="rotate(20 36 90)"/>
+      <ellipse cx="124" cy="90" rx="12" ry="9" fill="#7E5A45" transform="rotate(-20 124 90)"/>
+      <ellipse cx="80" cy="58" rx="44" ry="40" fill="#99745F"/>
+      <ellipse cx="62" cy="60" rx="15" ry="17" fill="#FFFFFF"/>
+      <ellipse cx="98" cy="60" rx="15" ry="17" fill="#FFFFFF"/>
+      <circle cx="64" cy="62" r="8" fill="#4A352A"/>
+      <circle cx="96" cy="62" r="8" fill="#4A352A"/>
+      <circle cx="67" cy="58" r="3" fill="#FFFFFF"/>
+      <circle cx="99" cy="58" r="3" fill="#FFFFFF"/>
+      <ellipse cx="42" cy="75" rx="9" ry="6" fill="#F2A69B" opacity="0.55"/>
+      <ellipse cx="118" cy="75" rx="9" ry="6" fill="#F2A69B" opacity="0.55"/>
+      <ellipse cx="80" cy="78" rx="13" ry="10" fill="#F2A69B"/>
+      <g fill="#FFFFFF">
+        <rect x="74" y="84" width="7" height="9" rx="2"/>
+        <rect x="81" y="84" width="7" height="9" rx="2"/>
+      </g>
+      <g stroke="#6B4F3F" stroke-width="2" stroke-linecap="round" opacity="0.5">
+        <line x1="48" y1="66" x2="32" y2="61"/>
+        <line x1="48" y1="76" x2="32" y2="76"/>
+        <line x1="48" y1="86" x2="32" y2="91"/>
+        <line x1="112" y1="66" x2="128" y2="61"/>
+        <line x1="112" y1="76" x2="128" y2="76"/>
+        <line x1="112" y1="86" x2="128" y2="91"/>
+      </g>
+    </g>
+  </svg>
+</template>
+
+<template id="tpl-gold">
+  <svg class="mole" viewBox="0 0 160 130" aria-hidden="true">
+    <g>
+      <ellipse cx="42" cy="26" rx="14" ry="16" fill="#E8A33A"/>
+      <ellipse cx="42" cy="26" rx="8" ry="10" fill="#FFE28A"/>
+      <ellipse cx="118" cy="26" rx="14" ry="16" fill="#E8A33A"/>
+      <ellipse cx="118" cy="26" rx="8" ry="10" fill="#FFE28A"/>
+      <path d="M80 14 l3.4 7 7.6 1 -5.5 5.5 1.4 7.6 -6.9 -3.6 -6.9 3.6 1.4 -7.6 -5.5 -5.5 7.6 -1 Z" fill="#FFF3C4"/>
+      <ellipse cx="80" cy="96" rx="48" ry="30" fill="#E8A33A"/>
+      <ellipse cx="80" cy="102" rx="28" ry="18" fill="#FFE9B8"/>
+      <ellipse cx="36" cy="90" rx="12" ry="9" fill="#E8A33A" transform="rotate(20 36 90)"/>
+      <ellipse cx="124" cy="90" rx="12" ry="9" fill="#E8A33A" transform="rotate(-20 124 90)"/>
+      <ellipse cx="80" cy="58" rx="44" ry="40" fill="#F6C453"/>
+      <ellipse cx="62" cy="60" rx="15" ry="17" fill="#FFFFFF"/>
+      <ellipse cx="98" cy="60" rx="15" ry="17" fill="#FFFFFF"/>
+      <circle cx="64" cy="62" r="8" fill="#4A352A"/>
+      <circle cx="96" cy="62" r="8" fill="#4A352A"/>
+      <circle cx="67" cy="58" r="3" fill="#FFFFFF"/>
+      <circle cx="99" cy="58" r="3" fill="#FFFFFF"/>
+      <ellipse cx="42" cy="75" rx="9" ry="6" fill="#F2A69B" opacity="0.6"/>
+      <ellipse cx="118" cy="75" rx="9" ry="6" fill="#F2A69B" opacity="0.6"/>
+      <ellipse cx="80" cy="78" rx="13" ry="10" fill="#F2A69B"/>
+      <g fill="#FFFFFF">
+        <rect x="74" y="84" width="7" height="9" rx="2"/>
+        <rect x="81" y="84" width="7" height="9" rx="2"/>
+      </g>
+      <g stroke="#8A5A2A" stroke-width="2" stroke-linecap="round" opacity="0.4">
+        <line x1="48" y1="66" x2="32" y2="61"/>
+        <line x1="48" y1="76" x2="32" y2="76"/>
+        <line x1="48" y1="86" x2="32" y2="91"/>
+        <line x1="112" y1="66" x2="128" y2="61"/>
+        <line x1="112" y1="76" x2="128" y2="76"/>
+        <line x1="112" y1="86" x2="128" y2="91"/>
+      </g>
+    </g>
+  </svg>
+</template>
+
+<template id="tpl-hill">
+  <svg class="hill-svg" viewBox="0 0 160 100" aria-hidden="true">
+    <ellipse cx="80" cy="80" rx="79" ry="30" fill="#8A5A3B"/>
+    <ellipse cx="80" cy="72" rx="72" ry="26" fill="#A06C47"/>
+    <ellipse cx="80" cy="70" rx="60" ry="22" fill="#5F3A26"/>
+    <path d="M20 52 q-3 -10 2 -13 q5 8 -2 13Z" fill="#6FBE6E"/>
+    <path d="M132 48 q3 -9 -2 -13 q-5 8 2 13Z" fill="#6FBE6E"/>
+    <path d="M76 52 q-2 -7 1 -9 q3 6 -1 9Z" fill="#7CC576"/>
+  </svg>
+</template>
+
+<script src="js/levels.js" defer></script>
+<script src="js/audio.js" defer></script>
+<script src="js/game.js" defer></script>
+</body>
+</html>
