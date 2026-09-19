@@ -439,16 +439,21 @@ body.night .score-box { color: #B9C9EC; }
 }
 
 #prompt {
+  position: fixed;
+  top: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
   text-align: center;
-  font-size: 19px;
+  font-size: 18px;
   color: var(--ink);
   background: var(--card);
-  margin: 104px auto 8px;
   width: max-content;
   max-width: 92vw;
-  padding: 8px 24px;
+  padding: 7px 22px;
   border-radius: 999px;
-  box-shadow: 0 6px 16px var(--shadow-soft);
+  box-shadow: 0 4px 14px var(--shadow-soft);
+  border: 2px solid var(--accent);
   z-index: 10;
 }
 
